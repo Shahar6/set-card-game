@@ -1,0 +1,67 @@
+BONUS CHALLENGE FORM
+--------------------
+
+For each bonus challenge you have implemented, please replace the sentence "We are not entitled to this bonus."
+with a short description of:
+
+1. How it was implemented in your code
+2. Where it was used (in which class methods).
+3. How you tested that it is working correctly.
+
+--------------------
+
+1. Fully supporting all configuration fields and avoiding the use of magic numbers
+
+1. we used the configuration fields from env.config in the classes: Player, Dealer and Table.
+2. in Player: methods: "penalty", "penaltyForSet", "createArtificialIntelligence" and "run".
+in Dealer: methods: "updateTimerDisplay" and "placeCardsWithSet".
+in Table: methods: "placeCard" and "removeCard".
+we implemented these fields in every sentence that needed to know a size of something that connects to the setting in the config.
+like in Player: we used configuration fields for the size of the queue of the player, to know how many presses we have already and make action.
+for the Ai we used the configuration fields of the size of the table (rows and collumns) for knowing 
+the range that the AI can choose a slot.
+in Table: we used these fields for the methods "placeCard" and "removeCard" for making the dealerThread to wait the time until placing 
+or removing the cards.
+in Dealer: we used these fields for the method "updateTimerDisplay" for knowing if the time is less than 5 sec and 
+change the color to red for the countdown.
+we used these fiels also for the field "timer" and for initialized the field "reshuffleTime".
+3. We tested that this is worked correctly by changing the config fields and running the program, that way its convenient to see a timer change or a penalty change.
+
+
+
+--------------------
+
+2. Terminating all threads (that you created) gracefully and in reverse order to the order they were created in.
+
+1. it implemented in our code: first the dealer tells the players to terminate in the reverse order from the initialized order.
+the dealer then waits for this player-thread to exit with the thread::join method.
+if the player is AI, so the AI thread needs to finish before the player thread, due to the design in the skeleton file.
+2. it used in the classes: Player and Dealer.
+    Dealer: methods: "terminate".
+    Player: methods: "createArtificialIntelligence" and "run".
+3. we verified that this is working correctly by printing the lines where a player thread and ai thread is created and when they end.
+--------------------
+
+3. Handling the config.turnTimeoutMillis value as follows:
+config.turnTimeoutMillis < 0: display nothing.
+config.turnTimeoutMillis = 0: display a timer since the last action (reshuffle or set collected).
+Note: in modes without a countdown timer the dealer must ensure there is always at least one legal set on the table.
+
+we implemented in our code: we build three modes: nothing, lastAction and shuffle with enum.
+in the method "placeCardsOnTable" we check the modes for which action, if the mode is shuffle 
+we place cards as always, if the mode is lastAction we send to the method "placeCardsWithSet" and we place the cards just when we have a set in table. 
+in the method "updateTimerDisplay" we check the mode to know what to do with the timer.
+the mode "shuffle" is used other wise in all the classes and methods.
+it was uses in Dealer, in the methods: "updateTimerDisplay" and "placeCardsOnTable" and "placeCardsWithSet" for the mode "lastAction".
+for the mode "shuffle" we used other wise in all the methods.
+another thing that happening is when we are at modes: "nothin" or "lastAction", the dealer will not get inside the functions : updateTimerDisplay and
+removeAllCardsFromTable in the loop at the method "run" of Dealer because he does not need to in these modes. in the mode "shuffle" he is going inside of course.
+we check that this is working correctly by change the config.turnTimeoutMillis to 0 for the mode "lastAction" and run the program and see if it works.
+we check that this is working correctly by change the config.turnTimeoutMillis to -1 for the mode "nothing" and run the program.
+we check that this is working correctly by change the config.turnTimeoutMillis to bigger than zero for the mode "shuffle" and run the program and see what happen. 
+
+4. Making sure that the threads do not wake up unless some actual job needs to be done (e.g., a value needs to be
+changed on the display, key input needs to be handled, etc.) and the only threads created by you are:
+1 thread per player + 1 additional thread for non-human players.
+
+We are not entitled to this bonus.
